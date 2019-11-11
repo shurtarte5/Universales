@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="pading_recycler_view">4dp</dimen>
+    <dimen name="corner_radius_card">4dp</dimen>
+    <dimen name="marginCardView">5dp</dimen>
+    <dimen name="margin_end_cardviewmovielocal">8dp</dimen>
+
+</resources>
