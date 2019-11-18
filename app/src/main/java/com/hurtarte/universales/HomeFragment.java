@@ -1,5 +1,6 @@
 package com.hurtarte.universales;
 
+import android.app.ActionBar;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -77,7 +79,15 @@ public class HomeFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_home,container,false);
 
             loadData();
+
+
+
             setHasOptionsMenu(true);
+
+
+
+
+
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -245,6 +255,8 @@ public class HomeFragment extends Fragment {
             searchView = (SearchView) searchItem.getActionView();
 
 
+
+
         }
 
 
@@ -281,4 +293,8 @@ public class HomeFragment extends Fragment {
 
         super.onCreateOptionsMenu(menu, inflater);
     }
+
+
+
+
 }

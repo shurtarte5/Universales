@@ -1,6 +1,7 @@
 package com.hurtarte.universales;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ActionBar actionBar= getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+
+
 
 
 
@@ -48,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+    }
+
+    @Override
+    public void onBackPressed() {
 
     }
 
