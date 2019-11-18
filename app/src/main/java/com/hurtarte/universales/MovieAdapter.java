@@ -8,6 +8,8 @@ import android.net.sip.SipSession;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -20,7 +22,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder>  implements Filterable {
     private List<MovieResult.ResultsBean> mMovieList;
     private Context mContext;
     private int contador;
@@ -38,10 +40,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     private List<MovieLocal> movieLocalList = new ArrayList<>();
 
+    private List<MovieLocal> movieLocalListFull;
+
 
     public MovieAdapter(Context context) {
 
         mContext = context;
+
+
 
     }
 
@@ -57,6 +63,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void setOnItemClickListener(OnItemClickListener listener) {
 
         mListener = listener;
+
 
 
     }
@@ -214,6 +221,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     public void setMoviesLocal(List<MovieLocal> movies) {
         this.movieLocalList = movies;
+        //Igualando el arraylist que mandamos desde home al arraylist del filtro de la barra de busqueda
+        movieLocalListFull= new ArrayList<>(movieLocalList);
         notifyDataSetChanged();
 
     }
@@ -225,4 +234,51 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
 
+    // Metodos que implemente filterable
+
+    @Override
+    public Filter getFilter() {
+        return movieFilter;
+    }
+
+    private Filter movieFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            List<MovieLocal> filterList = new ArrayList<>();
+
+            if(constraint==null || constraint.length()==0 ){
+                filterList.addAll(movieLocalListFull);
+
+            }else{
+                String filterPttern = constraint.toString().toLowerCase().trim();
+
+                for(MovieLocal item : movieLocalListFull){
+
+                    if(item.getTitulo().toLowerCase().contains(filterPttern)){
+                        filterList.add(item);
+
+                    }
+
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values=filterList;
+
+            return  results;
+
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            movieLocalList.clear();
+            movieLocalList.addAll((List)results.values);
+            notifyDataSetChanged();
+
+
+        }
+    };
+
+    /////////////////////////////////////////
 }

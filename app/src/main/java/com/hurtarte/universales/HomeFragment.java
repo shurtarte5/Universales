@@ -1,15 +1,18 @@
 package com.hurtarte.universales;
 
-import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,8 +21,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.hurtarte.universales.R;
 
 import java.util.List;
 
@@ -66,6 +67,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManagerMain;
     private MovieLocalViewModel a;
     private int contador=0;
+    private SearchView searchView = null;
 
 
 
@@ -75,6 +77,7 @@ public class HomeFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_home,container,false);
 
             loadData();
+            setHasOptionsMenu(true);
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -155,6 +158,8 @@ public class HomeFragment extends Fragment {
         });
 
 
+
+
         mAdapterMain.setOnItemClickListener(new MovieAdapter.OnItemClickListener() {
 
 
@@ -201,6 +206,9 @@ public class HomeFragment extends Fragment {
 
 
 
+
+
+
         return rootView;
     }
 
@@ -222,9 +230,55 @@ public class HomeFragment extends Fragment {
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(R.menu.movie_menu,menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(getContext().SEARCH_SERVICE);
+
+
+
+
+        if(searchItem!=null){
+
+            searchView = (SearchView) searchItem.getActionView();
+
+
+        }
+
+
+
+
+        if(searchView!=null){
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    mAdapterMain.getFilter().filter(newText);
+                    return false;
+                }
+            });
+
+
+        }
 
 
 
 
 
+
+
+
+
+
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 }
