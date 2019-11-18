@@ -1,7 +1,10 @@
 package com.hurtarte.universales;
 
+import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.Image;
+import android.net.sip.SipSession;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +23,34 @@ import java.util.List;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
     private List<MovieResult.ResultsBean> mMovieList;
     private Context mContext;
+    private int contador;
+    private static Context otherContext;
+    private boolean swithfavorito = false;
+    public int fav;
 
 
     private OnItemClickListener mListener;
+    private Application mApplication;
     private MovieLocalViewModel viewModel;
+    private int idmovie;
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String SWITCH1 = "swith1";
+
+    private List<MovieLocal> movieLocalList = new ArrayList<>();
+
+
+    public MovieAdapter(Context context) {
+
+        mContext = context;
+
+    }
 
 
     public interface OnItemClickListener {
 
-        void onInsertSwich(String title, String rating);
+        void onInsertSwich(MovieLocal movie, int fav);
+
+        void onItemClick(MovieLocal movie);
     }
 
 
@@ -40,36 +62,74 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
 
-
-
-    public static  class MovieViewHolder extends  RecyclerView.ViewHolder{
+    class MovieViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView poster;
         public TextView title;
         public TextView rating;
+        public TextView noVisible;
         public Switch favorite;
+        public boolean fav;
 
 
         public MovieViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
-            poster =  itemView.findViewById(R.id.imageViewCardView);
+            poster = itemView.findViewById(R.id.imageViewCardView);
             title = itemView.findViewById(R.id.textViewTituloCardView);
             rating = itemView.findViewById(R.id.textViewCalificacionCardView);
-            favorite= itemView.findViewById(R.id.switchFavorite);
+            //noVisible=itemView.findViewById(R.id.novisible);
+            favorite = itemView.findViewById(R.id.switchFavorite);
 
 
-         /*   favorite.setOnClickListener(new View.OnClickListener() {
+            //click en un elemento del recyclerview
+
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(listener!= null){
 
-                       String titulo = title.getText().toString();
-                       String r=rating.getText().toString();
-                       int p= getAdapterPosition();
+                    int position = getAdapterPosition();
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(movieLocalList.get(position));
 
-                       if(favorite.isChecked()){
+                    }
 
-                       }
+
+                }
+            });
+
+
+
+
+
+
+
+
+
+          favorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    if(listener!=null){
+
+                        int position = getAdapterPosition();
+
+                        if(position!=RecyclerView.NO_POSITION){
+
+                            if(favorite.isChecked()){
+
+
+                                listener.onInsertSwich(movieLocalList.get(position),1);
+
+                            }else{
+
+                                listener.onInsertSwich(movieLocalList.get(position),0);
+
+                            }
+
+                        }
+
+
 
 
 
@@ -79,8 +139,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
 
                     }
+
                 }
-            });*/
+            });
 
 
         }
@@ -88,32 +149,39 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     }
 
-    public MovieAdapter(List<MovieResult.ResultsBean> movieList, Context context){
+  /*  public MovieAdapter(List<MovieResult.ResultsBean> movieList, Context context, Application application){
 
         mMovieList=movieList;
         mContext=context;
+        mApplication=application;
+        otherContext=context;
 
 
 
-    }
+    }*/
 
 
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_main, parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_main, parent, false);
 
-        MovieViewHolder mvh=new MovieViewHolder(v, mListener);
+        MovieViewHolder mvh = new MovieViewHolder(v, mListener);
         return mvh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
 
-        MovieResult.ResultsBean currentMovie = mMovieList.get(position);
+        int favorito;
+
+        boolean favo = false;
+
+        MovieLocal currentMovie = movieLocalList.get(position);
         //MovieLocalViewModel myViewModel = new MovieLocalViewModel();
 
-        String url = "https://image.tmdb.org/t/p/w500" + currentMovie.getPoster_path();
+        String url = "https://image.tmdb.org/t/p/w500" + currentMovie.getPosterpath();
+
 
         Glide.with(mContext)
                 .load(url)
@@ -121,22 +189,40 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                 .into(holder.poster);
 
 
-        holder.title.setText(currentMovie.getTitle());
-        String rating1=currentMovie.getVote_average()+"";
+        holder.title.setText(currentMovie.getTitulo());
+        String rating1 = currentMovie.getRating() + "";
         holder.rating.setText(rating1);
+        //holder.noVisible.setText(currentMovie.getPoster_path());
+        //idmovie = currentMovie.getId();
+        fav = currentMovie.getFavorito();
 
 
+        if (fav == 1) {
+            holder.favorite.setChecked(true);
 
-
-
-
-
+        } else {
+            holder.favorite.setChecked(false);
+        }
 
 
     }
 
     @Override
     public int getItemCount() {
-        return mMovieList.size();
+        return movieLocalList.size();
     }
+
+    public void setMoviesLocal(List<MovieLocal> movies) {
+        this.movieLocalList = movies;
+        notifyDataSetChanged();
+
+    }
+
+    public MovieLocal getMovieLocal(int position) {
+
+        return movieLocalList.get(position);
+
+    }
+
+
 }

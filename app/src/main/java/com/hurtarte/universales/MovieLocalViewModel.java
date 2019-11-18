@@ -12,6 +12,7 @@ public class MovieLocalViewModel extends AndroidViewModel {
 
     private MovieLocalRepository repository;
     private LiveData<List<MovieLocal>> allMovies;
+    private LiveData<List<MovieLocal>> allFavorites;
 
 
 
@@ -20,10 +21,16 @@ public class MovieLocalViewModel extends AndroidViewModel {
 
         repository= new MovieLocalRepository(application);
         allMovies= repository.getAllMovies();
+        allFavorites= repository.getAllFavorites();
     }
 
     public void insert(MovieLocal movie){
         repository.insert(movie);
+
+    }
+
+    public void update(MovieLocal movie){
+        repository.update(movie);
 
     }
 
@@ -34,5 +41,9 @@ public class MovieLocalViewModel extends AndroidViewModel {
 
     public LiveData<List<MovieLocal>> getAllMovies(){
         return allMovies;
+    }
+
+    public LiveData<List<MovieLocal>> getFavMovies(){
+        return allFavorites;
     }
 }

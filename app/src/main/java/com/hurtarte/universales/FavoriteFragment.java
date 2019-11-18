@@ -28,7 +28,7 @@ public class FavoriteFragment extends Fragment {
         RecyclerView recyclerView = rootView.findViewById(R.id.recyclerviewFavorite);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        final MovieLocalAdapter adapter = new MovieLocalAdapter();
+        final MovieLocalAdapter adapter = new MovieLocalAdapter(getContext());
         recyclerView.setAdapter(adapter);
 
 
@@ -37,7 +37,7 @@ public class FavoriteFragment extends Fragment {
 
         movieLocalModel = ViewModelProviders.of(getActivity()).get(MovieLocalViewModel.class);
 
-        movieLocalModel.getAllMovies().observe(this, new Observer<List<MovieLocal>>() {
+        movieLocalModel.getFavMovies().observe(this, new Observer<List<MovieLocal>>() {
             @Override
             public void onChanged(List<MovieLocal> movieLocals) {
                 //Toast.makeText(getContext(),"cambio",Toast.LENGTH_SHORT).show();

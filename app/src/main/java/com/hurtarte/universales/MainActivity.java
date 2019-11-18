@@ -23,24 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-   /* public static String BASE_URL="https://api.themoviedb.org";
 
-    public static int PAGE = 1;
-
-    public static String API_KEY= "3abc5f93e76fd7c3dbdfd790df363d4a";
-
-    public static String LANGUAJE = "en-US";
-
-    public static String CATEGORY="popular";
-
-    private TextView textview;
-    //List <MovieResult.ResultsBean> listOfMovies;
-
-    List <MovieResult.ResultsBean> listOfMovies;
-
-    private RecyclerView mRecyclerViewMain;
-    private RecyclerView.Adapter mAdapterMain;
-    private RecyclerView.LayoutManager mLayoutManagerMain;*/
 
 
 
@@ -48,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
 
         BottomNavigationView bottonNav = findViewById(R.id.bottomNvigation);
         bottonNav.setOnNavigationItemSelectedListener(navListener);
@@ -58,61 +44,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-      // textview= (TextView) findViewById(R.id.mytextview);
 
-/*
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiInterface myInterface = retrofit.create(ApiInterface.class);
-
-        Call<MovieResult> call = myInterface.listOfMovies(CATEGORY,API_KEY,LANGUAJE,PAGE);
-
-        call.enqueue(new Callback<MovieResult>() {
-            @Override
-            public void onResponse(Call<MovieResult> call, Response<MovieResult> response) {
-                MovieResult results = response.body();
-
-                listOfMovies= results.getResults();
-                mRecyclerViewMain = findViewById(R.id.recyclerView);
-                mRecyclerViewMain.setHasFixedSize(true);
-                mLayoutManagerMain = new LinearLayoutManager(getApplicationContext());
-                mAdapterMain = new MovieAdapter(listOfMovies, getApplicationContext());
-
-                mRecyclerViewMain.setLayoutManager(mLayoutManagerMain);
-                mRecyclerViewMain.setAdapter(mAdapterMain);
-
-                //MovieResult.ResultsBean first = listOfMovies.get(0);
-
-
-
-               // textview.setText(first.getTitle());
-
-               // for (MovieResult.ResultsBean movies : listOfMovies) {
-                 //  String content = "";
-                   // content += movies.getTitle() + "\n";
-
-
-                  //  textview.append(content);
-                //}
-
-
-
-            }
-
-            @Override
-            public void onFailure(Call<MovieResult> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-
-
-
-
-*/
 
 
 

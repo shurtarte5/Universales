@@ -52,9 +52,11 @@ public abstract class MovieLocalDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            movieDao.insert(new MovieLocal("titulo1","rating1","poster 1"));
-            movieDao.insert(new MovieLocal("titulo2","rating2","poster 2"));
-            movieDao.insert(new MovieLocal("titulo3","rating3","poster 3"));
+           // movieDao.insert(new MovieLocal("titulo 1","rating 1","poster 1",0));
+            //movieDao.insert(new MovieLocal("titulo 2","rating 2","poster 2",0));
+          //  movieDao.insert(new MovieLocal(23,"titulo 3","rating 3","poster 3",1,"calidad la pelicula"));
+
+
 
             return null;
         }

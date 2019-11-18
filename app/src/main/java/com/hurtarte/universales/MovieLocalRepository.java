@@ -12,12 +12,15 @@ public class MovieLocalRepository {
     private MovieLocalDao movieDao;
     private LiveData<List<MovieLocal>> allMovies;
 
+    private LiveData<List<MovieLocal>> allFavorites;
+
     public MovieLocalRepository(Application application) {
 
         MovieLocalDatabase database = MovieLocalDatabase.getInstance(application);
         movieDao = database.moviedao();
 
         allMovies = movieDao.getAllMovies();
+        allFavorites = movieDao.getFavMovies();
 
 
 
@@ -32,6 +35,12 @@ public class MovieLocalRepository {
 
     }
 
+    public void update(MovieLocal movie){
+
+        new UpdateMovieLocalAsynTask(movieDao).execute(movie);
+
+    }
+
     public void delete(MovieLocal movie){
         new DeleteMovieLocalAsyncTask(movieDao).execute(movie);
 
@@ -41,6 +50,12 @@ public class MovieLocalRepository {
     public LiveData<List<MovieLocal>> getAllMovies() {
         return allMovies;
     }
+
+    public LiveData<List<MovieLocal>> getAllFavorites() {
+        return allFavorites;
+    }
+
+
 
 
     private static class InsertMovieLocalAsyncTask extends AsyncTask<MovieLocal, Void, Void>{
@@ -71,7 +86,35 @@ public class MovieLocalRepository {
         @Override
         protected Void doInBackground(MovieLocal... movieLocals) {
             movieDao.delete(movieLocals[0]);
+
             return null;
         }
     }
+
+
+    private static class UpdateMovieLocalAsynTask extends  AsyncTask<MovieLocal,Void,Void>{
+        private MovieLocalDao movieDao;
+
+
+        private UpdateMovieLocalAsynTask(MovieLocalDao movieDao){
+
+           this.movieDao=movieDao;
+
+        }
+
+
+
+        @Override
+        protected Void doInBackground(MovieLocal... movieLocals) {
+            movieDao.updateMovie(movieLocals[0]);
+
+            return null;
+        }
+    }
+
+
+
+
+
+
 }
